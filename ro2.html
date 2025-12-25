@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CJ RADIO SALATIGA - Suara Sahabat Salatiga</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #042f2e; 
+            background: radial-gradient(circle at top right, #0d9488, #042f2e);
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .glass { 
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+
+        .gradient-text { 
+            background: linear-gradient(to right, #facc15, #fbbf24); 
+            -webkit-background-clip: text; 
+            -webkit-fill-color: transparent; 
+        }
+
+        /* Animasi Waveform */
+        .bar { 
+            width: 4px; 
+            background: #facc15; 
+            animation: wave 1s infinite alternate; 
+        }
+        @keyframes wave { 
+            from { height: 4px; } 
+            to { height: 100%; } 
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <nav class="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
+        <div class="text-2xl font-extrabold tracking-tighter">
+            <span class="text-yellow-400">CJ</span> RADIO
+        </div>
+        <div class="hidden md:flex gap-8 text-sm font-bold uppercase tracking-widest text-teal-200">
+            <a href="#" class="hover:text-yellow-400 transition">Beranda</a>
+            <a href="https://wa.me/62812345678" target="_blank" class="hover:text-yellow-400 transition">Kontak</a>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-8 py-12 flex flex-col md:flex-row items-center gap-16">
+        
+        <div class="md:w-1/2 text-center md:text-left">
+            <h2 class="text-teal-400 font-bold tracking-[0.3em] uppercase text-xs mb-4">Streaming Online dari Salatiga</h2>
+            <h1 class="text-6xl md:text-8xl font-extrabold mb-6 leading-none text-white">
+                Suara Sahabat <br><span class="gradient-text">Salatiga.</span>
+            </h1>
+            <p class="text-teal-100/70 text-lg mb-10 max-w-md">
+                Dengarkan musik terbaik dan informasi terkini langsung dari jantung kota Salatiga, 24 jam nonstop.
+            </p>
+
+            <div class="glass p-10 rounded-[40px] w-full max-w-md shadow-2xl border-white/10">
+                <div class="flex flex-col items-center md:items-start gap-8">
+                    
+                    <div class="flex items-center gap-6 w-full">
+                        <button id="playBtn" class="w-24 h-24 bg-yellow-400 hover:bg-yellow-500 text-teal-950 rounded-full flex items-center justify-center text-4xl shadow-xl transition-all transform active:scale-90 shadow-yellow-400/20">
+                            <i id="playIcon" class="fas fa-play ml-1"></i>
+                        </button>
+
+                        <div class="text-left flex-1">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p id="statusTxt" class="text-[10px] font-black uppercase tracking-widest text-teal-400 mb-1">Radio Ready</p>
+                                    <h3 class="text-2xl font-bold italic">CJ Radio Live</h3>
+                                </div>
+                                <div id="visualizer" class="flex items-end gap-1 h-6 hidden">
+                                    <div class="bar" style="animation-delay: 0.1s"></div>
+                                    <div class="bar" style="animation-delay: 0.3s"></div>
+                                    <div class="bar" style="animation-delay: 0.2s"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full">
+                        <p class="text-[10px] text-teal-400 font-bold uppercase tracking-widest mb-3 text-center md:text-left">Volume Kontrol</p>
+                        <div class="flex items-center gap-4">
+                            <i class="fas fa-volume-down text-teal-400 text-xs"></i>
+                            <input type="range" id="volRange" min="0" max="1" step="0.1" value="0.8" class="w-full h-1 bg-teal-900 rounded-lg appearance-none cursor-pointer accent-yellow-400">
+                            <i class="fas fa-volume-up text-teal-400 text-xs"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="md:w-1/2 relative hidden md:block">
+            <div class="absolute inset-0 bg-yellow-400 rounded-full blur-[120px] opacity-10"></div>
+            <div class="glass p-4 rounded-[60px] rotate-3 hover:rotate-0 transition-all duration-700 shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=1000&auto=format&fit=crop" 
+                     alt="Radio Studio" 
+                     class="rounded-[50px] w-full h-[480px] object-cover">
+            </div>
+        </div>
+    </main>
+
+    <div class="fixed bottom-8 right-8">
+        <a href="https://wa.me/62812345678" target="_blank" class="flex items-center gap-3 bg-green-500 hover:bg-green-600 px-6 py-4 rounded-full font-bold shadow-2xl transition-all hover:-translate-y-1">
+            <i class="fab fa-whatsapp text-2xl"></i>
+            <span>Tanya Penyiar</span>
+        </a>
+    </div>
+
+    <audio id="radioPlayer"></audio>
+
+    <script>
+        const audio = document.getElementById('radioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = document.getElementById('playIcon');
+        const statusTxt = document.getElementById('statusTxt');
+        const visualizer = document.getElementById('visualizer');
+        const volRange = document.getElementById('volRange');
+
+        // URL Streaming terbaru berdasarkan data Anda
+        const streamUrl = "http://78.129.237.51:33420/;stream";
+        let isPlaying = false;
+
+        playBtn.addEventListener('click', () => {
+            if (!isPlaying) {
+                // Memberikan src saat klik untuk menghindari blokir browser
+                audio.src = streamUrl;
+                audio.play().then(() => {
+                    isPlaying = true;
+                    playIcon.classList.replace('fa-play', 'fa-stop');
+                    playIcon.classList.remove('ml-1');
+                    statusTxt.innerText = "SEDANG MENGUDARA";
+                    statusTxt.style.color = "#f87171";
+                    visualizer.classList.remove('hidden');
+                }).catch(err => {
+                    console.error("Gagal memutar:", err);
+                    alert("Koneksi gagal. Pastikan radio ONLINE di panel Listen2MyRadio atau cek koneksi internet Anda.");
+                });
+            } else {
+                audio.pause();
+                audio.src = ""; // Membersihkan buffer
+                isPlaying = false;
+                playIcon.classList.replace('fa-stop', 'fa-play');
+                playIcon.classList.add('ml-1');
+                statusTxt.innerText = "PAUSED";
+                statusTxt.style.color = "#2dd4bf";
+                visualizer.classList.add('hidden');
+            }
+        });
+
+        // Kontrol Volume
+        volRange.addEventListener('input', (e) => {
+            audio.volume = e.target.value;
+        });
+    </script>
+</body>
+</html>
